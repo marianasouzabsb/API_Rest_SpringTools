@@ -44,28 +44,36 @@ public class IndexController {
 		List<Usuario> list = (List<Usuario>) usuarioRepository.findAll();
 		return new ResponseEntity<List<Usuario>>(list, HttpStatus.OK);
 	}
-	
-	//Metodo de salvar
+
+	// Metodo de salvar
 	@PostMapping(value = "/", produces = "application/json")
 	public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuario) {
+
+		for (int pos = 0; pos < usuario.getTelefones().size(); pos++) {
+			usuario.getTelefones().get(pos).setUsuario(usuario);
+		}
 		Usuario usuarioSalvo = usuarioRepository.save(usuario);
 		return new ResponseEntity<Usuario>(usuarioSalvo, HttpStatus.OK);
 	}
-	
-	//Metodo de atualizar
+
+	// Metodo de atualizar
 	@PutMapping(value = "/", produces = "application/json")
 	public ResponseEntity<Usuario> atualizar(@RequestBody Usuario usuario) {
+		
+		for (int pos = 0; pos < usuario.getTelefones().size(); pos++) {
+			usuario.getTelefones().get(pos).setUsuario(usuario);
+		}
+
 		Usuario usuarioSalvo = usuarioRepository.save(usuario);
 		return new ResponseEntity<Usuario>(usuarioSalvo, HttpStatus.OK);
 	}
-	
+
 	// Metodo DELETE
-		@DeleteMapping(value = "/{id}", produces = "application/text")
-		public ResponseEntity<String> delete(@PathVariable(value = "id") Long id) {
-			
-			usuarioRepository.deleteById(id);
-			return  ResponseEntity.ok("ok");
-		}
+	@DeleteMapping(value = "/{id}", produces = "application/text")
+	public ResponseEntity<String> delete(@PathVariable(value = "id") Long id) {
+		usuarioRepository.deleteById(id);
+		return ResponseEntity.ok("ok");
+	}
 
 //
 }
